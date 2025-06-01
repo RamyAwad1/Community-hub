@@ -16,33 +16,33 @@ const LandingPage = () => {
           </div> */}
         </section>
 
-        {/* --- Feature Section with Three Cards --- */}
+   
         <section className="feature-section">
           <h2>What You Can Do</h2>
           <div className="cards-container"> 
 
-            {/* Card 1 */}
+         
             <div className="card">
               <img src="/images/discover-events.jpg" alt="Discover Events" className="card-image" />
               <h3>Discover Amazing Events</h3> 
               <p>Explore a variety of local events tailored to your interests. Find your next adventure!</p>
             </div>
 
-            {/* Card 2 */}
+          
             <div className="card">
               <img src="/images/location-map.jpg" alt="Location Map" className="card-image" />
               <h3>Effortless Location Mapping</h3> 
               <p>Easily find events near you with our integrated mapping features. Never miss out!</p>
             </div>
 
-            {/* Card 3 */}
+         
             <div className="card">
               <img src="/images/host-events.jpg" alt="Host Your Own Event" className="card-image" />
               <h3>Become an Impactful Host</h3>
               <p>Create and manage your own community events with intuitive tools and support.</p>
             </div>
 
-          </div> {/* End cards-container */}
+          </div> 
         </section>
 
         <section className="about-section">

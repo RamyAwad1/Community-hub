@@ -1,8 +1,8 @@
-// src/App.jsx
+
 
 import { Routes, Route } from 'react-router-dom';
-// IMPORT YOUR AUTH PROVIDER HERE
-import { AuthProvider } from '../context/AuthContext.jsx'; // Make sure this path is correct and ends with .jsx
+
+import { AuthProvider } from '../context/AuthContext.jsx'; 
 
 import LandingPage from '../pages/LandingPage.jsx';
 import LoginPage from '../pages/LoginPage.jsx';

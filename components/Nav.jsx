@@ -1,11 +1,11 @@
-// src/components/Nav.jsx
+
 
 import { Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext.jsx'; // Make sure this path is correct AND has .jsx
+import { useAuth } from '../context/AuthContext.jsx'; 
 import '../css/Nav.css';
 
 const Nav = () => {
-  const { user, isAuthenticated, isLoading, loginWithRedirect, logout } = useAuth(); // Error points here
+  const { user, isAuthenticated, isLoading, loginWithRedirect, logout } = useAuth(); 
 
   // Define links based on authentication status and user role
   const getNavLinks = () => {
