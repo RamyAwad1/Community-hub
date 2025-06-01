@@ -1,0 +1,173 @@
+/* src/css/LandingPage.css */
+
+/* --- Overall Page Section Styles --- */
+.landing-page-main {
+  width: 100%; /* Ensure the main content area takes full width */
+  /* Add any other specific styles for the overall main content here */
+}
+
+.hero-section,
+.feature-section,
+.about-section {
+  padding: 60px 20px; /* Consistent vertical padding for sections */
+  text-align: center;
+  width: 100%; /* Ensure sections take full width */
+}
+
+.hero-section {
+  background-color: #f0f4f8; /* Light blue-grey background */
+  color: #333; /* Darker text for contrast */
+}
+
+.hero-section h1 {
+  font-size: 3.5rem; /* Larger heading */
+  margin-bottom: 20px;
+  color: #2c3e50; /* Dark blue for heading */
+}
+
+.hero-section p {
+  font-size: 1.3rem;
+  color: #555;
+  max-width: 800px; /* Limit paragraph width for readability */
+  margin: 0 auto 30px auto; /* Center paragraph and add bottom margin */
+}
+
+.hero-cta {
+  display: flex;
+  justify-content: center; /* Center the buttons horizontally */
+  gap: 20px; /* Space between buttons */
+  margin-top: 30px;
+}
+
+.cta-button {
+  background-color: #f4b400; /* Yellow button */
+  padding: 15px 30px;
+  border: none;
+  border-radius: 8px;
+  text-decoration: none;
+  color: black; /* Text color on button */
+  font-weight: bold;
+  font-size: 1.1rem;
+  transition: background-color 0.3s ease;
+}
+
+.cta-button:hover {
+  background-color: #e0a200; /* Slightly darker yellow on hover */
+}
+
+
+.feature-section {
+  background-color: #ffffff; /* White background for features */
+  color: #333;
+}
+
+.feature-section h2 {
+  font-size: 2.8rem;
+  margin-bottom: 40px;
+  color: #2c3e50;
+}
+
+.about-section {
+  background-color: #e6e9ed; /* Light grey background for about */
+  color: #333;
+}
+
+.about-section h2 {
+  font-size: 2.8rem;
+  margin-bottom: 20px;
+  color: #2c3e50;
+}
+
+.about-section p {
+  font-size: 1.1rem;
+  color: #555;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* --- Card Specific Styles --- */
+.cards-container {
+  display: flex; /* Use flexbox for card layout */
+  justify-content: center; /* Center the cards horizontally */
+  flex-wrap: wrap; /* Allow cards to wrap to the next line on smaller screens */
+  gap: 30px; /* Space between cards */
+  margin-top: 30px;
+  max-width: 1200px; /* Limit overall width of card container for better readability */
+  margin-left: auto; /* Center the container itself */
+  margin-right: auto; /* Center the container itself */
+}
+
+.card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1); /* Softer, larger shadow */
+  padding: 25px;
+  width: 300px; /* Fixed width for each card */
+  display: flex; /* Use flexbox inside the card for content stacking */
+  flex-direction: column; /* Stack image, phrase, and text vertically */
+  align-items: center; /* Center content horizontally within the card */
+  text-align: center; /* Center text content */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px); /* Slight lift effect on hover */
+  box-shadow: 0 12px 24px rgba(0,0,0,0.2); /* More prominent shadow on hover */
+}
+
+.card-image {
+  width: 100%; /* Image takes full width of the card */
+  max-height: 180px; /* Limit image height */
+  object-fit: cover; /* Crop image to fit */
+  border-radius: 8px; /* Slightly rounded corners for images */
+  margin-bottom: 20px; /* Space below image */
+}
+
+.card h3 {
+  font-size: 1.8rem; /* Size for the catching phrase */
+  margin-bottom: 10px;
+  color: #2c3e50;
+}
+
+.card p {
+  font-size: 1rem;
+  color: #666;
+  line-height: 1.5;
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 768px) {
+  .hero-section h1 {
+      font-size: 2.5rem;
+  }
+  .hero-section p {
+      font-size: 1.1rem;
+  }
+  .feature-section h2,
+  .about-section h2 {
+      font-size: 2.2rem;
+  }
+  .cards-container {
+      flex-direction: column; /* Stack cards vertically on smaller screens */
+      align-items: center; /* Center stacked cards */
+  }
+  .card {
+      width: 90%; /* Make cards take more width on smaller screens */
+      max-width: 350px; /* Max width to prevent them from becoming too wide */
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-section,
+  .feature-section,
+  .about-section {
+      padding: 40px 15px; /* Reduce padding on very small screens */
+  }
+  .hero-section h1 {
+      font-size: 2rem;
+  }
+  .cta-button {
+      padding: 12px 20px;
+      font-size: 1rem;
+  }
+}
