@@ -1,0 +1,137 @@
+
+
+.profile-container {
+    padding: 30px;
+    max-width: 800px; /* Adjust width as needed */
+    margin: 30px auto; /* Centered with vertical margin */
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.profile-container h2 {
+    color: #2e3b55;
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+}
+
+.profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    text-align: left; /* Align form elements to left */
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group textarea {
+    width: calc(100% - 20px); /* Account for padding */
+    padding: 12px 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+    color: #333;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+.form-group .read-only {
+    background-color: #f8f8f8;
+    cursor: default;
+    border-color: #eee;
+}
+/* Style to remove focus outline for read-only fields */
+.form-group .read-only:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.profile-actions {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+/* Base button styles */
+.btn {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+.primary-btn {
+    background-color: #007bff;
+    color: white;
+}
+
+.primary-btn:hover {
+    background-color: #0056b3;
+}
+
+.secondary-btn {
+    background-color: #6c757d;
+    color: white;
+}
+
+.secondary-btn:hover {
+    background-color: #5a6268;
+}
+
+.save-status {
+    margin-top: 15px;
+    font-size: 1rem;
+    color: #28a745; /* Green for success */
+    min-width: 150px;
+    text-align: center;
+}
+
+.profile-loading, .profile-not-found {
+    text-align: center;
+    padding: 50px;
+    font-size: 1.2rem;
+    color: #555;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .profile-container {
+        padding: 20px;
+        margin: 20px auto;
+        max-width: 90%;
+    }
+
+    .profile-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
