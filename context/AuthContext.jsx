@@ -41,6 +41,16 @@ export const AuthProvider = ({ children }) => {
           nickname: 'Johnny', // Added for profile
           bio: 'Avid community volunteer.', // Added for profile
         };
+        // Determine role based on email for easy testing
+        if (email === 'organizer@example.com') {
+            mockUser.role = 'organizer';
+            mockUser.id = 'organizer1'; // Assign a specific ID for the organizer mock
+            mockUser.name = 'Organizer John';
+          } else if (email === 'admin@example.com') {
+            mockUser.role = 'admin';
+            mockUser.id = 'admin1';
+            mockUser.name = 'Admin Alice';
+          }
         localStorage.setItem('user', JSON.stringify(mockUser));
         setUser(mockUser);
         setIsAuthenticated(true);

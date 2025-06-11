@@ -1,0 +1,221 @@
+/* src/css/OrganizerDashboardPage.css */
+
+.organizer-dashboard-container {
+    padding: 30px;
+    max-width: 1200px;
+    margin: 30px auto;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.organizer-dashboard-container h2 {
+    color: #2e3b55;
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+}
+
+.create-event-toggle-btn {
+    margin-bottom: 30px;
+    padding: 12px 25px;
+    font-size: 1.1rem;
+    background-color: #28a745; /* Green color */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.create-event-toggle-btn:hover {
+    background-color: #218838;
+}
+
+.event-form-section {
+    background-color: #f9f9f9;
+    padding: 25px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    border: 1px solid #e0e0e0;
+}
+
+.event-form-section h3 {
+    color: #333;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+}
+
+.event-form .form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.event-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #555;
+}
+
+.event-form input[type="text"],
+.event-form input[type="datetime-local"],
+.event-form textarea {
+    width: calc(100% - 22px);
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.event-form textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.organizer-event-list h3 {
+    color: #333;
+    font-size: 2rem;
+    margin-bottom: 25px;
+}
+
+.event-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    justify-content: center;
+    padding: 0 15px;
+}
+
+.event-card {
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease-in-out;
+}
+
+.event-card:hover {
+    transform: translateY(-5px);
+}
+
+.event-card-image {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-bottom: 1px solid #eee;
+}
+
+.event-card-content {
+    padding: 20px;
+    text-align: left;
+    flex-grow: 1;
+}
+
+.event-card-content h4 {
+    font-size: 1.5rem;
+    color: #2e3b55;
+    margin-bottom: 10px;
+}
+
+.event-card-content p {
+    font-size: 0.95rem;
+    color: #666;
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.event-actions {
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.btn {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+}
+
+.primary-btn {
+    background-color: #007bff;
+    color: white;
+}
+.primary-btn:hover {
+    background-color: #0056b3;
+}
+
+.secondary-btn {
+    background-color: #6c757d;
+    color: white;
+}
+.secondary-btn:hover {
+    background-color: #5a6268;
+}
+
+.danger-btn {
+    background-color: #dc3545;
+    color: white;
+}
+.danger-btn:hover {
+    background-color: #c82333;
+}
+
+.status-pending {
+    color: #ffc107;
+    font-weight: bold;
+}
+
+.status-approved {
+    color: #28a745;
+    font-weight: bold;
+}
+
+.status-rejected {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+.error-message {
+    color: #dc3545;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.organizer-dashboard-loading,
+.organizer-dashboard-unauthorized {
+    text-align: center;
+    padding: 50px;
+    font-size: 1.2rem;
+    color: #555;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .organizer-dashboard-container {
+        padding: 20px;
+        margin: 20px auto;
+        max-width: 95%;
+    }
+
+    .event-cards-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .event-form input[type="text"],
+    .event-form input[type="datetime-local"],
+    .event-form textarea {
+        width: calc(100% - 20px);
+    }
+}

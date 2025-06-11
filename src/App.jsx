@@ -9,6 +9,7 @@ import EventDetailsPage from '../pages/EventDetailsPage.jsx';
 import EventsPage from '../pages/EventsPage.jsx'; 
 import ProtectedRoute from '../components/ProtectedRoute.jsx';
 import UserProfilePage from '../pages/UserProfilePage.jsx';
+import OrganizerDashboardPage from '../pages/OrganizerDashboardPage.jsx';
 
 function App() {
   return (
@@ -18,7 +19,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/events" element={<EventsPage />} />
 
-        {/* Protected Dashboard Route */}
+        {/* Protected user Dashboard Route */}
         <Route
           path="/dashboard"
           element={
@@ -44,6 +45,16 @@ function App() {
           element={
             <ProtectedRoute allowedRoles={['user', 'organizer', 'admin']}>
               <UserProfilePage />
+            </ProtectedRoute>
+          }
+          
+        />
+        {/* Protected Organizer Dashboard Route */}
+        <Route
+          path="/organizer-dashboard"
+          element={
+            <ProtectedRoute allowedRoles={['organizer', 'admin']}>
+              <OrganizerDashboardPage />
             </ProtectedRoute>
           }
         />
