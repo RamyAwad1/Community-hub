@@ -1,21 +1,32 @@
 
-
-import { Link } from 'react-router-dom';
+import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx'; 
 import '../css/Nav.css';
 
-const Nav = () => {
-  const { user, isAuthenticated, isLoading, loginWithRedirect, logout } = useAuth(); 
+const Navbar = () => {
+  const { user, isAuthenticated, isLoading, logout } = useAuth(); 
+  const navigate = useNavigate();
 
-  // Define links based on authentication status and user role
+  const handleLogout = () => {
+    logout(); 
+    navigate('/login'); 
+  };
+
   const getNavLinks = () => {
-    let links = [
-      { label: 'Home', href: '/' },
-      { label: 'Events', href: '/events' },
-    ];
+    let links = [];
 
+    // Links for all users
+    links.push({ label: 'Home', href: '/' });
+    links.push({ label: 'Events', href: '/events' }); // Public events page
+
+    // Links for authenticated users
     if (isAuthenticated && user) {
-      switch (user.role) { // This 'user.role' would only exist if you configure Auth0 to pass custom claims
+      links.push({ label: 'Dashboard', href: '/dashboard' });
+      links.push({ label: 'Profile', href: '/profile' });
+
+      // Role-specific links (from your original code)
+      switch (user.role) {
         case 'organizer':
           links.push(
             { label: 'My Events', href: '/organizer' },
@@ -39,7 +50,9 @@ const Nav = () => {
 
   return (
     <nav className="navbar">
-      <div className="logo"><Link to="/">CommunityHub</Link></div>
+      <div className="navbar-brand">
+        <Link to="/">EventHub</Link>
+      </div>
       <div className="nav-links">
         {navLinks.map(link => (
           <Link key={link.href} to={link.href}>{link.label}</Link>
@@ -49,27 +62,28 @@ const Nav = () => {
           <span className="loading-status">Loading...</span>
         ) : isAuthenticated ? (
           <>
-            {user && user.picture && (
-              <img src={user.picture} alt={user.name || "User"} className="user-avatar" />
-            )}
             {user && user.name && (
-              <span className="user-name">{user.name}</span>
+              <span className="user-name">Hello, {user.name}!</span>
             )}
+            {user && !user.name && user.email && (
+              <span className="user-name">Hello, {user.email}!</span>
+            )}
+            
             <button
               className="btn logout-btn"
-              onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}
+              onClick={handleLogout}
             >
               Log Out
             </button>
           </>
         ) : (
-          <button className="btn login-btn" onClick={() => loginWithRedirect()}>
+          <Link to="/login" className="btn login-btn">
             Log In
-          </button>
+          </Link>
         )}
       </div>
     </nav>
   );
 };
 
-export default Nav;
+export default Navbar;

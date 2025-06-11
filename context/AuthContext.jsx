@@ -1,37 +1,85 @@
 
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import { createContext, useContext } from 'react';
-import { useAuth0 } from '@auth0/auth0-react'; // Make sure you have installed @auth0/auth0-react
-
-const AuthContext = createContext(); // This initializes the custom AuthContext
+const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  // This hook relies on Auth0Provider being a parent component in your tree (see main.jsx)
-  const { user, isAuthenticated, isLoading, loginWithRedirect, logout } = useAuth0();
+  const navigate = useNavigate();
 
-  // Create the value object that will be passed to components using useAuth()
-  const authContextValue = {
-    user: user || null, // Ensure user is null if not authenticated/loading
-    isAuthenticated,
-    isLoading,
-    loginWithRedirect,
-    logout,
+  // Initialize user state from localStorage for mock persistence
+  const [user, setUser] = useState(() => JSON.parse(localStorage.getItem('user') || 'null'));
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const checkAuthStatus = () => {
+      setIsLoading(true);
+      const storedUser = JSON.parse(localStorage.getItem('user') || 'null');
+      if (storedUser && storedUser.token) {
+        setUser(storedUser);
+        setIsAuthenticated(true);
+      } else {
+        setUser(null);
+        setIsAuthenticated(false);
+      }
+      setIsLoading(false);
+    };
+    checkAuthStatus();
+  }, []);
+
+  const login = async (email, password) => {
+    setIsLoading(true);
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const mockUser = {
+          id: '1',
+          name: 'John Doe',
+          email,
+          role: 'user',
+          token: 'mock-token',
+          nickname: 'Johnny', // Added for profile
+          bio: 'Avid community volunteer.', // Added for profile
+        };
+        localStorage.setItem('user', JSON.stringify(mockUser));
+        setUser(mockUser);
+        setIsAuthenticated(true);
+        setIsLoading(false);
+        resolve(mockUser);
+      }, 1000);
+    });
+  };
+
+  const logout = () => {
+    localStorage.removeItem('user');
+    setUser(null);
+    setIsAuthenticated(false);
+    navigate('/login');
+  };
+
+  const getUserRole = () => user?.role;
+
+  // Mock function to update user profile information
+  const updateUser = async (newProfileData) => {
+    setIsLoading(true);
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        setUser(prevUser => {
+          const updatedUser = { ...prevUser, ...newProfileData };
+          localStorage.setItem('user', JSON.stringify(updatedUser)); // Persist updated user
+          return updatedUser;
+        });
+        setIsLoading(false);
+        resolve();
+      }, 500); // Simulate API call delay
+    });
   };
 
   return (
-    // AuthContext.Provider makes the authContextValue available to all its children
-    <AuthContext.Provider value={authContextValue}>
+    <AuthContext.Provider value={{ user, isAuthenticated, isLoading, login, logout, getUserRole, updateUser }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-// This is a custom hook that components like Nav and LoginPage will use
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-};
+export const useAuth = () => useContext(AuthContext);
