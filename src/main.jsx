@@ -1,29 +1,30 @@
 
-
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
-import { Auth0Provider } from '@auth0/auth0-react'; 
+import { Auth0Provider } from '@auth0/auth0-react';
+import { AuthProvider } from '../context/AuthContext.jsx'; // Import your custom AuthProvider
 
 import App from './App.jsx';
 import './index.css';
-
-const auth0Domain = "dev-wqyb0g18v4u840mz.us.auth0.com"; 
-const auth0ClientId = "XplGoBRxIHQKbFpIL0XBc3a2F5cTpkhM"; 
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <BrowserRouter>
-     
-      <Auth0Provider
-        domain={auth0Domain}
-        clientId={auth0ClientId}
-        authorizationParams={{
-          redirect_uri: window.location.origin,
-        }}
-      >
-        <App /> 
-      </Auth0Provider>
-    </BrowserRouter>
-  </React.StrictMode>
+    <Auth0Provider
+      domain={import.meta.env.VITE_AUTH0_DOMAIN}
+      clientId={import.meta.env.VITE_AUTH0_CLIENT_ID}
+      authorizationParams={{
+        redirect_uri: window.location.origin,
+        
+      }}
+    >
+      <BrowserRouter>
+        {/*custom AuthProvider must wrap App so App can use useAuth() */}
+        <AuthProvider>
+          <App />
+        </AuthProvider>
+      </BrowserRouter>
+    </Auth0Provider>
+  </React.StrictMode>,
 );

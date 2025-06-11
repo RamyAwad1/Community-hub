@@ -1,0 +1,84 @@
+
+
+.admin-dashboard-container {
+    padding: 30px;
+    max-width: 1200px;
+    margin: 30px auto;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.admin-dashboard-container h2 {
+    color: #2e3b55;
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+}
+
+.table-responsive {
+    overflow-x: auto; /* Ensures table is responsive on small screens */
+    margin-top: 20px;
+}
+
+/* Base Bootstrap Table styles are applied via classes in JSX */
+/* You typically don't need to re-declare these if Bootstrap CSS is imported */
+/* .table, .table-striped, .table-bordered, .table-hover classes handle this */
+
+.admin-events-table {
+    margin-top: 20px;
+}
+
+/* Specific styling for status badges */
+.status-pending {
+    color: #856404; /* Dark yellow */
+    background-color: #fff3cd; /* Light yellow */
+    padding: 4px 8px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.status-approved {
+    color: #155724; /* Dark green */
+    background-color: #d4edda; /* Light green */
+    padding: 4px 8px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.status-rejected {
+    color: #721c24; /* Dark red */
+    background-color: #f8d7da; /* Light red */
+    padding: 4px 8px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+/* Action buttons alignment */
+.admin-actions {
+    white-space: nowrap; /* Keep buttons on one line */
+}
+
+/* Small button styling (Bootstrap .btn-sm) */
+/* .btn-sm styles are handled by Bootstrap CSS */
+
+/* Margin between buttons (Bootstrap .me-2) */
+/* .me-2 is handled by Bootstrap CSS utilities */
+
+.error-message {
+    color: #dc3545;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.admin-loading-message,
+.admin-unauthorized-message,
+.no-events-message {
+    text-align: center;
+    padding: 50px;
+    font-size: 1.2rem;
+    color: #555;
+}
