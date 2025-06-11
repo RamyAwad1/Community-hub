@@ -29,8 +29,7 @@ const Navbar = () => {
       switch (user.role) {
         case 'organizer':
           links.push(
-            { label: 'My Events', href: '/organizer' },
-            { label: 'Create Event', href: '/organizer/create' }
+            { label: 'Organizer Dashboard', href: '/organizer-dashboard' }
           );
           break;
         case 'admin':
