@@ -34,8 +34,9 @@ const Navbar = () => {
           break;
         case 'admin':
           links.push(
-            { label: 'Admin Dashboard', href: '/admin' },
-            { label: 'Manage Events', href: '/admin/events' }
+            { label: 'Admin Dashboard', href: '/admin-dashboard' }, 
+            { label: 'Approved Events', href: '/admin/approved-events' }, 
+            { label: 'Manage Users', href: '/admin/users' } // User management page
           );
           break;
         default:
