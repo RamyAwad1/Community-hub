@@ -1,148 +1,130 @@
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import Cookies from 'js-cookie'; 
+import { usersApi } from '../src/utils/api.js'; // Will use token directly
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { useAuth0 } from '@auth0/auth0-react';
-import * as mockApi from '../api/mockApi.js'; 
-const AuthContext = createContext(null);
-
-export const useAuth = () => {
-  return useContext(AuthContext);
-};
+const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  
-  const {
-    isAuthenticated,      
-    user: auth0User,      // The user object provided by Auth0 (e.g., { sub: 'auth0|...', name: '...', email: '...' })
-    loginWithRedirect,    
-    logout: auth0Logout,  
-    isLoading: auth0IsLoading, 
-    getAccessTokenSilently, // Function to get access token for secured APIs
-  } = useAuth0();
+  const [user, setUser] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [authError, setAuthError] = useState(null);
+  const [token, setToken] = useState(null);
 
-  // combining Auth0 data with mock API roles
-  const [appUser, setAppUser] = useState(null);
-  // Our application's loading state, which includes Auth0's loading and our own processing
-  const [appIsLoading, setAppIsLoading] = useState(true);
-
-  // useEffect to process Auth0 user data and set our app's user state
+  // On initial load, try to retrieve token and user profile
   useEffect(() => {
-    const processAuth0User = async () => {
-      // If Auth0 SDK is still initializing or checking session, the app is also loading
-      if (auth0IsLoading) {
-        setAppIsLoading(true);
-        return;
-      }
+    const storedToken = Cookies.get('jwt_token') || localStorage.getItem('jwt_token');
+    if (storedToken) {
+      setToken(storedToken);
+      setIsAuthenticated(true); // Optimistically authenticate
+    }
+    setIsLoading(false);
+  }, []);
 
-      // If Auth0 has successfully authenticated a user
-      if (isAuthenticated && auth0User) {
-        let role = 'user'; // Default role for any new user
-        let userId = auth0User.sub; // Auth0's unique user ID 
-        let userName = auth0User.name || auth0User.nickname || auth0User.email || 'Guest';
-        let userEmail = auth0User.email;
-
-        // Try to fetch user from our mock database using their Auth0 ID (sub)
-        let existingMockUser = await mockApi.fetchUserById(userId);
-
-        if (existingMockUser) {
-          // If the user already exists in our mock database, use their stored role and info
-          role = existingMockUser.role;
-          userName = existingMockUser.name || userName; // Prefer mock data's name if available
-          userEmail = existingMockUser.email || userEmail; // Prefer mock data's email
-        } else {
-          // This is a brand new Auth0 user (not yet in our mock DB).
-          // Assign role based on special emails for testing purposes, otherwise default to 'user'.
-          if (userEmail === 'organizer@example.com') {
-            role = 'organizer';
-          } else if (userEmail === 'admin@example.com') {
-            role = 'admin';
-          }
-          // Add this new user to our mock API's user list with their Auth0 'sub' as ID
-          // mockApi.updateUser acts as an "upsert" (creates if not exists).
-          existingMockUser = await mockApi.updateUser(userId, {
-            id: userId,
-            name: userName,
-            email: userEmail,
-            role: role, // Assign the determined role
-          });
-          role = existingMockUser.role; // Confirm role from the upserted user
+  // Fetch user profile when token/auth status changes
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      if (token && isAuthenticated) {
+        setIsLoading(true);
+        setAuthError(null);
+        try {
+          const profile = await usersApi.getUserProfile(token);
+          setUser(profile);
+          setIsAuthenticated(true);
+          console.log("AuthContext: User profile loaded:", profile);
+        } catch (error) {
+          console.error("AuthContext: Error fetching user profile:", error);
+          setAuthError(error.message || "Failed to load user profile.");
+          handleLogout(); // Logout on profile fetch failure
+        } finally {
+          setIsLoading(false);
         }
-
-        // Set our app's internal user state
-        setAppUser({
-          id: userId,
-          name: userName,
-          email: userEmail,
-          role: role,
-          // You can include other Auth0 user properties if needed, e.g.:
-          // picture: auth0User.picture,
-          // You might also want to store tokens if you plan to call external APIs
-        });
-      } else {
-        // If not authenticated, clear our app's user state
-        setAppUser(null);
+      } else if (!token && !isLoading) {
+        setUser(null);
+        setIsAuthenticated(false);
+        setAuthError(null);
+        console.log("AuthContext: No token or not authenticated. Resetting state.");
       }
-      // Finished processing Auth0 state, so our app is no longer in its initial loading phase
-      setAppIsLoading(false);
     };
+    fetchUserProfile();
+  }, [token, isAuthenticated]);
 
-    processAuth0User();
-  }, [auth0IsLoading, isAuthenticated, auth0User, getAccessTokenSilently]); // Dependencies for this effect
-
-  // Define the login function for your app, which uses Auth0's loginWithRedirect
-  const login = async () => {
-    // This will redirect the user to Auth0's Universal Login page.
-    // The redirect_uri is configured in main.jsx.
-    await loginWithRedirect();
-  };
-
-  // Define the logout function for your app, which uses Auth0's logout
-  const logout = async () => {
-    // Auth0's logout function will clear the session and redirect back to your app.
-    // The returnTo URL is configured in main.jsx (or can be passed here).
-    await auth0Logout({ logoutParams: { returnTo: window.location.origin } });
-    // Also clear our local app user state immediately
-    setAppUser(null);
-  };
-
-  // Function to get user role (now directly from our appUser state)
-  const getUserRole = () => appUser?.role;
-
-  // Function to update user profile information in mock API
-  const updateUserProfile = async (newProfileData) => {
-    if (!appUser) {
-      console.error("Cannot update profile: No user logged in.");
-      return;
-    }
-    setAppIsLoading(true);
+  // Login function
+  const login = async (email, password) => {
+    setIsLoading(true);
+    setAuthError(null);
     try {
-      // Update the user in our mock database using their Auth0 ID
-      const updatedUser = await mockApi.updateUser(appUser.id, {
-        ...appUser, // Start with current appUser data
-        ...newProfileData // Overlay with new data
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
       });
-      setAppUser(updatedUser); // Update our app's user state
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || 'Login failed.');
+
+      Cookies.set('jwt_token', data.token, { expires: 1 });
+      localStorage.setItem('jwt_token', data.token);
+      setToken(data.token);
+      setUser(data.user);
+      setIsAuthenticated(true);
+      console.log("AuthContext: Login successful!");
+      return true;
     } catch (error) {
-      console.error("Failed to update user profile in mock API:", error);
-      throw error; // Re-throw to allow component to handle
+      console.error("AuthContext: Login error:", error);
+      setAuthError(error.message || "Invalid credentials.");
+      setUser(null);
+      setIsAuthenticated(false);
+      return false;
     } finally {
-      setAppIsLoading(false);
+      setIsLoading(false);
     }
   };
 
-  return (
-    <AuthContext.Provider
-      value={{
-        user: appUser,          // Our app's processed user object
-        isAuthenticated,      // From Auth0
-        isLoading: appIsLoading, // Our app's combined loading state
-        login,                
-        logout,               
-        getUserRole,          
-        updateUserProfile,    
-        // You can expose Auth0 specific methods like getAccessTokenSilently if needed elsewhere:
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
+  // Register function
+  const register = async (email, name, password) => {
+    setIsLoading(true);
+    setAuthError(null);
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, name, password }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || 'Registration failed.');
+
+      // Auto-login after registration
+      const loginSuccess = await login(email, password);
+      if (!loginSuccess) throw new Error("Registration successful, but auto-login failed.");
+      
+      console.log("AuthContext: Registration successful!");
+      return true;
+    } catch (error) {
+      console.error("AuthContext: Registration error:", error);
+      setAuthError(error.message || "Registration failed.");
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Logout function
+  const handleLogout = () => {
+    console.log("AuthContext: Performing logout.");
+    Cookies.remove('jwt_token');
+    localStorage.removeItem('jwt_token');
+    setToken(null);
+    setUser(null);
+    setIsAuthenticated(false);
+    setAuthError(null);
+  };
+
+  const value = { user, isAuthenticated, isLoading, authError, login, register, logout: handleLogout, token };
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+};
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (context === undefined) throw new Error('useAuth must be used within an AuthProvider');
+  return context;
 };

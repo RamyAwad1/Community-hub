@@ -2,7 +2,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import Layout from '../layout/Layout.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
-import * as mockApi from '../api/mockApi.js';
 import { Table, Button } from 'react-bootstrap';
 import '../css/AdminDashboardPage.css'; // Reusing admin dashboard CSS
 

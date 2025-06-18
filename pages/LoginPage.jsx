@@ -1,93 +1,51 @@
-
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
-import Layout from '../layout/Layout.jsx';
-import { Form, Button, Alert } from 'react-bootstrap';
 
 const LoginPage = () => {
-    // user is not needed as App.jsx will handle redirection based on it.
-    const { login, isAuthenticated, isLoading } = useAuth();
-    const [formData, setFormData] = useState({ email: '', password: '' });
-    const [error, setError] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const { login, isAuthenticated, isLoading, authError } = useAuth();
+  const navigate = useNavigate();
 
-    
-    // If isAuthenticated is true, the App.jsx useEffect will handle the redirect.
+  useEffect(() => {
+    if (isAuthenticated && !isLoading) navigate('/dashboard', { replace: true });
+  }, [isAuthenticated, isLoading, navigate]);
 
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await login(email, password);
+  };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setError('');
-        try {
-            // If already authenticated, do not initiate login again.
-            if (isAuthenticated && !isLoading) {
-                console.log("Already authenticated, preventing re-initiation of Auth0 login.");
-                return; // Prevent calling loginWithRedirect if already logged in.
-            }
-            // This initiates the Auth0 Universal Login redirect.
-            // Auth0 handles the full page redirect. No further client-side navigation needed here.
-            await login();
-        } catch (err) {
-            console.error("Auth0 login initiation failed:", err);
-            setError("Failed to initiate login. Please try again.");
-        }
-    };
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+      <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-md">
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Login to Community Hub</h2>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+            <input type="email" id="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} required
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="you@example.com" />
+          </div>
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+            <input type="password" id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} required
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="••••••••" />
+          </div>
 
-    // Show a loading message if Auth0 is in the process of authenticating or redirecting
-    if (isLoading) {
-        return <Layout><div className="text-center my-5">Loading authentication state...</div></Layout>;
-    }
+          {authError && (<div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+            <strong className="font-bold">Error! </strong><span className="block sm:inline">{authError}</span></div>)}
 
-   
-    // This message is a fallback in case of very unusual timing, but shouldn't be seen typically.
-    if (isAuthenticated) {
-        return <Layout><div className="text-center my-5">You are already logged in. Redirecting...</div></Layout>;
-    }
-
-    return (
-        <Layout>
-            <div className="login-container">
-                <h2>Login</h2>
-                {error && <Alert variant="danger">{error}</Alert>}
-                <Form onSubmit={handleSubmit}>
-                    {/* These fields are visually present but not directly used by Auth0's Universal Login */}
-                    <Form.Group className="mb-3" controlId="formBasicEmail">
-                        <Form.Label>Email address</Form.Label>
-                        <Form.Control
-                            type="email"
-                            placeholder="Enter email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            required
-                        />
-                    </Form.Group>
-
-                    <Form.Group className="mb-3" controlId="formBasicPassword">
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control
-                            type="password"
-                            placeholder="Password"
-                            name="password"
-                            value={formData.password}
-                            onChange={handleChange}
-                            required
-                        />
-                    </Form.Group>
-
-                    <Button variant="primary" type="submit" className="w-100">
-                        Login with Auth0
-                    </Button>
-                </Form>
-                <div className="mt-3 text-center">
-                    Don't have an account? <Link to="/signup">Sign Up</Link>
-                </div>
-            </div>
-        </Layout>
-    );
+          <button type="submit" className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-lg font-semibold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out" disabled={isLoading}>
+            {isLoading ? 'Logging In...' : 'Login'}
+          </button>
+        </form>
+        <p className="mt-6 text-center text-gray-600 text-sm">
+          Don't have an account? <Link to="/register" className="font-medium text-blue-600 hover:text-blue-500">Register here</Link>
+        </p>
+      </div>
+    </div>
+  );
 };
 
 export default LoginPage;
