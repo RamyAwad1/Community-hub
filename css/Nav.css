@@ -1,94 +1,21 @@
 /* src/css/Nav.css */
-
-.navbar {
-  display: flex;
-  justify-content: space-between; /* Puts logo on left, links on right */
-  align-items: center; /* Vertically center items */
-  padding: 16px 32px; /* Padding inside the navbar */
-  background-color: #2e3b55; /* Dark blue background */
-  color: #fff; /* Default text color for the navbar */
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Subtle shadow */
-  min-height: 60px; /* Ensure a minimum height for the navbar */
+* Custom hover effect for Nav.Links to match your yellow color */
+.navbar .nav-link.hover-blue-200:hover {
+  color: #f4b400 !important; 
+ 
+  border-radius: 0.5rem; 
 }
 
-.logo {
-  font-size: 1.8rem; /* Slightly larger logo text */
+
+.navbar .nav-link.signup-btn-custom {
+  background-color: #f4b400; 
+  color: #000 !important; /* Black text */
   font-weight: bold;
-}
-
-.logo a {
-  color: #fff; /* Ensure logo link is white */
-  text-decoration: none; /* Remove underline from logo link */
-}
-
-.nav-links {
-  display: flex; /* Use flexbox to arrange links */
-  gap: 25px; /* Space between links */
-  align-items: center; /* Vertically center links and buttons */
-}
-
-/* CORRECTED SELECTOR: Target Link components directly */
-.nav-links a {
-  color: #fff; /* White text for links */
-  text-decoration: none; /* Remove underline */
-  font-weight: 500;
-  font-size: 1.1rem; /* Slightly larger font size for readability */
-  padding: 5px 10px; /* Add some padding for clickable area */
-  transition: color 0.3s ease, background-color 0.3s ease, border-radius 0.3s ease;
-}
-
-.nav-links a:hover {
-  color: #f4b400; /* Yellow on hover */
-  /* You could also add a subtle background on hover */
-  /* background-color: rgba(255,255,255,0.1); */
-  /* border-radius: 4px; */
-}
-
-/* Styles for buttons within the nav-links div (e.g., login/logout) */
-.nav-links button {
-  background-color: #f4b400; /* Yellow background for buttons */
-  padding: 8px 16px;
-  border: none;
-  border-radius: 6px;
-  color: #000; /* Black text for contrast */
-  font-weight: bold;
-  font-size: 1rem;
-  cursor: pointer;
+  border-radius: 0.5rem; 
+  padding: 0.5rem 1rem; 
   transition: background-color 0.3s ease;
 }
 
-.nav-links button:hover {
-  background-color: #e0a200; /* Slightly darker yellow on hover */
-}
-
-/* Assuming signup-btn is for a specific button, perhaps for unauthenticated users */
-.signup-btn {
-  background-color: #f4b400;
-  padding: 8px 14px;
-  border-radius: 6px;
-  color: #000;
-}
-
-/* Responsive adjustments for smaller screens */
-@media (max-width: 768px) {
-  .navbar {
-      flex-direction: column; /* Stack logo and nav-links vertically */
-      padding: 15px 20px;
-      align-items: flex-start; /* Align items to the start when stacked */
-  }
-
-  .nav-links {
-      margin-top: 15px; /* Space below the logo */
-      flex-direction: column; /* Stack links vertically */
-      align-items: flex-start; /* Align links to the left */
-      width: 100%; /* Make links take full width */
-      gap: 10px; /* Reduce gap between stacked links */
-  }
-
-  .nav-links a,
-  .nav-links button {
-      width: 100%; /* Make links and buttons full width when stacked */
-      text-align: left; /* Align text to the left */
-      padding: 10px 15px; /* Adjust padding for full-width links */
-  }
+.navbar .nav-link.signup-btn-custom:hover {
+  background-color: #e0a200 !important; 
 }

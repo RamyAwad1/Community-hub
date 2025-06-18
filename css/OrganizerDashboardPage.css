@@ -1,4 +1,3 @@
-/* src/css/OrganizerDashboardPage.css */
 
 .organizer-dashboard-container {
     padding: 30px;
@@ -10,10 +9,17 @@
     text-align: center;
 }
 
-.organizer-dashboard-container h2 {
+.organizer-dashboard-container h1 { /* Changed from h2 to h1 for main title */
     color: #2e3b55;
     font-size: 2.5rem;
     margin-bottom: 30px;
+}
+
+.organizer-dashboard-container h2 { /* Added for section titles */
+    color: #2e3b55;
+    font-size: 2rem; /* Slightly smaller than h1 */
+    margin-bottom: 25px;
+    text-align: left; /* Adjust as needed */
 }
 
 .create-event-toggle-btn {
@@ -38,6 +44,7 @@
     border-radius: 8px;
     margin-bottom: 30px;
     border: 1px solid #e0e0e0;
+    text-align: left; /* Align form labels/inputs left */
 }
 
 .event-form-section h3 {
@@ -48,7 +55,7 @@
 
 .event-form .form-group {
     margin-bottom: 20px;
-    text-align: left;
+    /* text-align: left; // Handled by parent event-form-section */
 }
 
 .event-form label {
@@ -59,13 +66,17 @@
 }
 
 .event-form input[type="text"],
-.event-form input[type="datetime-local"],
+.event-form input[type="datetime-local"], /* Note: Bootstrap Forms will style this better */
+.event-form input[type="date"],
+.event-form input[type="time"],
+.event-form input[type="number"],
 .event-form textarea {
-    width: calc(100% - 22px);
+    width: calc(100% - 22px); /* Adjusting for padding/border if not using Bootstrap form controls */
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 1rem;
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
 }
 
 .event-form textarea {
@@ -84,7 +95,7 @@
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 25px;
     justify-content: center;
-    padding: 0 15px;
+    padding: 0 15px; /* Adjust padding for cards grid */
 }
 
 .event-card {
@@ -133,6 +144,7 @@
     display: flex;
     gap: 10px;
     justify-content: flex-end;
+    padding: 0 20px 20px; /* Padding for buttons at the bottom of the card */
 }
 
 .btn {
@@ -169,32 +181,55 @@
     background-color: #c82333;
 }
 
+/* Status badges - consistent with Admin Dashboard, but using the colors from this CSS */
 .status-pending {
-    color: #ffc107;
+    color: #ffc107; /* Orange/Yellow */
+    background-color: rgba(255,193,7,0.2); /* Lighter background */
+    padding: 4px 8px;
+    border-radius: 5px;
     font-weight: bold;
 }
 
 .status-approved {
-    color: #28a745;
+    color: #28a745; /* Green */
+    background-color: rgba(40,167,69,0.2); /* Lighter background */
+    padding: 4px 8px;
+    border-radius: 5px;
     font-weight: bold;
 }
 
 .status-rejected {
-    color: #dc3545;
+    color: #dc3545; /* Red */
+    background-color: rgba(220,53,69,0.2); /* Lighter background */
+    padding: 4px 8px;
+    border-radius: 5px;
     font-weight: bold;
 }
 
-.error-message {
+.organizer-error-message {
     color: #dc3545;
     background-color: #f8d7da;
     border: 1px solid #f5c6cb;
     padding: 10px;
     border-radius: 5px;
     margin-bottom: 20px;
+    text-align: left; /* Ensure it aligns left */
 }
 
-.organizer-dashboard-loading,
-.organizer-dashboard-unauthorized {
+.organizer-success-message {
+    color: #28a745;
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    text-align: left; /* Ensure it aligns left */
+}
+
+
+.organizer-loading-message,
+.organizer-access-denied-message,
+.no-events-message {
     text-align: center;
     padding: 50px;
     font-size: 1.2rem;
@@ -215,6 +250,9 @@
 
     .event-form input[type="text"],
     .event-form input[type="datetime-local"],
+    .event-form input[type="date"],
+    .event-form input[type="time"],
+    .event-form input[type="number"],
     .event-form textarea {
         width: calc(100% - 20px);
     }

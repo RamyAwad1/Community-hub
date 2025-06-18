@@ -1,12 +1,12 @@
-// src/App.jsx
 import React, { useEffect } from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom'; // Import useNavigate
-import { useAuth } from '../context/AuthContext.jsx'; // Import useAuth hook
+import { Routes, Route, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext.jsx';
 
-// Page Components 
+// Page Components
 import LandingPage from '../pages/LandingPage.jsx';
 import LoginPage from '../pages/LoginPage.jsx';
-import UserDashboardPage from '../pages/UserDashboard.jsx'; 
+import RegisterPage from '../pages/RegisterPage.jsx';
+import UserDashboardPage from '../pages/UserDashboard.jsx';
 import EventDetailsPage from '../pages/EventDetailsPage.jsx';
 import EventsPage from '../pages/EventsPage.jsx';
 import UserProfilePage from '../pages/UserProfilePage.jsx';
@@ -14,66 +14,39 @@ import OrganizerDashboardPage from '../pages/OrganizerDashboardPage.jsx';
 import AdminDashboardPage from '../pages/AdminDashboardPage.jsx';
 import ApprovedEventsPage from '../pages/ApprovedEventsPage.jsx';
 import AdminUsersPage from '../pages/AdminUsersPage.jsx';
+// NEW: Import the NominatimSearchPage
+import NominatimSearchPage from '../pages/NominatimSearchPage.jsx';
 
 // Components
-import ProtectedRoute from '../components/ProtectedRoute.jsx'; 
+import ProtectedRoute from '../components/ProtectedRoute.jsx';
+import Layout from '../layout/Layout.jsx'; // Corrected path to Layout
 
 function App() {
-  const { isAuthenticated, user, isLoading } = useAuth(); 
-  const navigate = useNavigate(); 
+  const { isAuthenticated, user, isLoading } = useAuth(); // Auth is now custom/dummy
+  const navigate = useNavigate();
 
-  // Effect to handle redirection after authentication
   useEffect(() => {
-  
-    // Only proceed with redirection logic if Auth is not loading, user is authenticated, and user data is available
+    
     if (!isLoading && isAuthenticated && user) {
-      let redirectPath = '/'; // Default redirect path
-
-      // Determine the default landing path based on the user's role
-      if (user.role === 'admin') {
-        redirectPath = '/admin-dashboard';
-      } else if (user.role === 'organizer') {
-        redirectPath = '/organizer-dashboard';
-      } else if (user.role === 'user') {
-        redirectPath = '/dashboard'; // Regular user lands on their dashboard
-      } else {
-        // Fallback for an authenticated user with an unrecognized or null role
-        console.warn("App.jsx useEffect: Authenticated user has an unrecognized or null role, defaulting to /dashboard.");
-        redirectPath = '/dashboard';
-      }
-
-     
-
-      // Crucial Fix: Only redirect if the user is on a specific pre-authentication page
-      // (like the root, login, or Auth0 callback) and not already on their target dashboard.
-      const isInitialAuthPage = window.location.pathname === '/' ||
-                               window.location.pathname === '/login' ||
-                               window.location.pathname.startsWith('/callback'); // Auth0 often uses /callback for silent redirects
-      
-      if (isInitialAuthPage && window.location.pathname !== redirectPath) {
-        // Console log before actual navigation
-        console.log(`App.jsx useEffect: Condition met! Navigating from ${window.location.pathname} to ${redirectPath}`);
-        navigate(redirectPath, { replace: true }); // Perform the redirect
-      } else {
-        // Console log if no redirect is needed (already on target path or on another valid page)
-        console.log("App.jsx useEffect: Already on target path, or on a different valid page, or no initial redirect needed.");
-      }
+        console.log(`App.jsx: User is authenticated. Role: ${user.role || 'N/A'}`);
     } else {
-      // Console log if redirect condition is NOT met (e.g., still loading, not authenticated, or user object missing)
-      console.log("App.jsx useEffect: Redirect condition NOT met (still loading, not authenticated, or user object missing).");
+        console.log("App.jsx: User is not authenticated or still loading custom auth state.");
     }
-  }, [isAuthenticated, user, isLoading, navigate]); // Dependencies for useEffect
+  }, [isAuthenticated, user, isLoading, navigate]);
 
   return (
     <Routes>
-      {/* Public Routes - Accessible to all */}
-      <Route path="/" element={<LandingPage />} />
+      
+      <Route path="/" element={<LandingPage/>}></Route>
       <Route path="/login" element={<LoginPage />} />
-      <Route path="/events" element={<EventsPage />} /> {/* Public events list */}
+      <Route path="/register" element={<RegisterPage />} />
+      <Route path="/events" element={<EventsPage />} />
+      <Route path="/events/:eventId" element={<EventDetailsPage />} />
+     
+      <Route path="/location-search" element={<NominatimSearchPage />} />
 
-      {/* Protected Routes - Require Authentication and potentially specific roles */}
-
-      {/* User Dashboard */}
+      {/* Protected Routes - These will currently rely on the dummy isAuthenticated from AuthContext,
+          so they will likely always redirect to login until custom auth is built. */}
       <Route
         path="/dashboard"
         element={
@@ -83,17 +56,6 @@ function App() {
         }
       />
 
-      {/* Event Details Page */}
-      <Route
-        path="/events/:eventId" // Dynamic route for event details
-        element={
-          <ProtectedRoute allowedRoles={['user', 'organizer', 'admin']}>
-            <EventDetailsPage />
-          </ProtectedRoute>
-        }
-      />
-
-      {/* User Profile Page */}
       <Route
         path="/profile"
         element={
@@ -103,7 +65,6 @@ function App() {
         }
       />
 
-      {/* Organizer Dashboard */}
       <Route
         path="/organizer-dashboard"
         element={
@@ -113,7 +74,6 @@ function App() {
         }
       />
 
-      {/* Admin Dashboard */}
       <Route
         path="/admin-dashboard"
         element={
@@ -123,7 +83,6 @@ function App() {
         }
       />
 
-      {/* Admin Approved Events Page */}
       <Route
         path="/admin/approved-events"
         element={
@@ -133,7 +92,6 @@ function App() {
         }
       />
 
-      {/* Admin Users Management Page */}
       <Route
         path="/admin/users"
         element={
